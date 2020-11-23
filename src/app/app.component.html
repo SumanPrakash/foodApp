@@ -1,3 +1,22 @@
-<input type="text" [(ngModel)]="name" />
-<br />
-{{ name }}
+<app-header></app-header>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="row">
+        <div class="col-md-5">
+          <app-recipe-list></app-recipe-list>
+        </div>
+        <div class="col-md-7">
+          <app-recipe-detail></app-recipe-detail>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-10">
+          <app-shopping-list-edit></app-shopping-list-edit>
+          <hr />
+          <p>The List</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
