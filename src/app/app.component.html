@@ -2,21 +2,8 @@
 <div class="container">
   <div class="row">
     <div class="col-md-12">
-      <div class="row" *ngIf="featureLoaded === 'recipe'">
-        <div class="col-md-5">
-          <app-recipe-list (recipeSelected)="onRecipeSelect($event)"></app-recipe-list>
-        </div>
-        <div class="col-md-7">
-          <app-recipe-detail [recipe]="recipeLoaded" *ngIf="recipeLoaded"></app-recipe-detail>
-        </div>
-      </div>
-      <div class="row" *ngIf="featureLoaded === 'shopping-list'">
-        <div class="col-xs-10">
-          <app-shopping-list-edit></app-shopping-list-edit>
-          <hr />
-          <app-shopping-list></app-shopping-list>
-        </div>
-      </div>
+      <app-recipes *ngIf="loadedFeature === 'recipe'"></app-recipes>
+      <app-shopping-list *ngIf="loadedFeature !== 'recipe'"></app-shopping-list>
     </div>
   </div>
 </div>

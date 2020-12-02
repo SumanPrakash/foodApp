@@ -1,37 +1,26 @@
-import { Recipe } from './../recipe.model';
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+
+import { Recipe } from '../recipe.model';
 
 @Component({
   selector: 'app-recipe-list',
   templateUrl: './recipe-list.component.html',
-  styleUrls: ['./recipe-list.component.css'],
+  styleUrls: ['./recipe-list.component.css']
 })
 export class RecipeListComponent implements OnInit {
+  @Output() recipeWasSelected = new EventEmitter<Recipe>();
   recipes: Recipe[] = [
-    new Recipe(
-      'Pasta',
-      'Cheesy pineapple pasta',
-      'https://www.jessicagavin.com/wp-content/uploads/2018/03/cobb-salad-7B-1200.jpg'
-    ),
-    new Recipe(
-      'Recipe1',
-      'This is recipe 1',
-      'https://i0.wp.com/post.healthline.com/wp-content/uploads/2020/04/shakshuka-egg-1296x728-header.jpg?w=1155&h=1528'
-    ),
-    new Recipe(
-      'Recipe2',
-      'This is recipe 2',
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBjoC0llcLubuz4fC0oCTfuA03V_fsqqPgSA&usqp=CAU'
-    ),
+    new Recipe('A Test Recipe', 'This is simply a test', 'https://upload.wikimedia.org/wikipedia/commons/1/15/Recipe_logo.jpeg'),
+    new Recipe('Another Test Recipe', 'This is simply a test', 'https://upload.wikimedia.org/wikipedia/commons/1/15/Recipe_logo.jpeg')
   ];
 
-  @Output() recipeSelected = new EventEmitter<Recipe>();
+  constructor() { }
 
-  constructor() {}
-
-  ngOnInit(): void { }
-
-  onSelect(recipe) {
-    this.recipeSelected.emit(recipe);
+  ngOnInit() {
   }
+
+  onRecipeSelected(recipe: Recipe) {
+   this.recipeWasSelected.emit(recipe);
+  }
+
 }
