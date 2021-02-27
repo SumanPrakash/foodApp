@@ -1,9 +1,13 @@
-import { RecipeService } from './../recipe.service';
-import { ShoppingListService } from './../../shopping-list/shopping-list.service';
+import * as RecipesActions from './../store/recipe.actions';
+import { Store } from '@ngrx/store';
 import { Component, OnInit } from '@angular/core';
 
 import { Recipe } from '../recipe.model';
 import { ActivatedRoute, Router } from '@angular/router';
+import * as ShoppingListActions from '../../shopping-list/store/shopping-list.actions';
+import * as fromApp from 'src/app/store/app.reducer';
+import { map, switchMap } from 'rxjs/operators';
+import { arraysAreNotAllowedMsg } from '@ngrx/store/src/models';
 
 @Component({
   selector: 'app-recipe-detail',
@@ -15,27 +19,38 @@ export class RecipeDetailComponent implements OnInit {
   id: number;
 
   constructor(
-    private shoppingListService: ShoppingListService,
     private route: ActivatedRoute,
     private router: Router,
-    private recipeService: RecipeService
+    private store: Store<fromApp.AppState>
   ) { }
 
   ngOnInit() {
-    this.route.params.subscribe((params) => {
-      this.id = +params['id'];
-      this.recipe = this.recipeService.getRecipes()[this.id];
+    this.route.params.pipe(
+      map(params => {
+        return +params['id'];
+      }),
+      switchMap(id => {
+        this.id = id;
+        return this.store.select('recipes');
+      }),
+      map(recipesState => {
+        return recipesState.recipes.find((recipe, index) => {
+          return index == this.id;
+        });
+      })
+    ).subscribe(recipe => {
+      this.recipe = recipe
     });
   }
 
   onAddToShoppingList() {
     this.recipe.ingredients.forEach((element) => {
-      this.shoppingListService.addIngredient(element);
+      this.store.dispatch(new ShoppingListActions.AddIngredient(element))
     });
   }
 
   onDeleteRecipe() {
-    this.recipeService.deleteRecipe(this.id);
+    this.store.dispatch(new RecipesActions.DeleteRecipe(this.id));
     this.router.navigate(['../'], { relativeTo: this.route });
   }
 }
